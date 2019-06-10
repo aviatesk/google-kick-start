@@ -4,6 +4,15 @@ import java.util.*;
 
 public class Solution {
 
+    private static class Node {
+        int index;
+        int height;
+        Node(int index, int height) {
+            this.index = index;
+            this.height = height;
+        }
+    }
+
     private static Scanner sc;
     private static int t;
     private static int R;
@@ -14,7 +23,7 @@ public class Solution {
     public static void main(String[] args) {
         sc = new Scanner(System.in);
         int T = sc.nextInt();
-        for (t = 0; t < T; t += 1) {
+        for (t = 1; t <= T; t += 1) {
             load();
             solve();
         }
@@ -24,66 +33,82 @@ public class Solution {
         R = sc.nextInt();
         C = sc.nextInt();
         K = sc.nextInt();
-        V = new int[R][C];
+        V = new int[R][C + 1];
         for (int r = 0; r < R; r += 1) {
             for (int c = 0; c < C; c += 1) {
                 V[r][c] = Integer.parseInt(sc.next());
             }
+            V[r][C] = Integer.MAX_VALUE;
         }
     }
 
     private static void solve() {
-        int[] numGoods = new int[C * (C + 1) / 2];
-        int max = Integer.MIN_VALUE;
+        int[][] P = makeP();
 
+        int maxArea = maxArea(P);
+
+        System.out.println(String.format("Case #%d: %d", t, maxArea));
+    }
+
+    private static int[][] makeP() {
+        int[][] P = new int[R][C];
         for (int row = 0; row < R; row += 1) {
-            int[] diff2Right = makeDiff(row);
-            update(numGoods, diff2Right);
-
-            int tmpMax = Integer.MIN_VALUE;
-            for (int numGood : numGoods) {
-                if (tmpMax < numGood) {
-                    tmpMax = numGood;
-                }
-            }
-
-            if (max < tmpMax) {
-                max = tmpMax;
-            }
+            makePHelper(row,  P[row], 0);
         }
-
-        System.out.println(String.format("Case #%d: %d", t + 1, max));
+        return P;
     }
 
-    private static void update(int[] numGoods, int[] diff2Right) {
-        int index = 0;
-        for (int c1 = 0; c1 < C; c1 += 1) {
-            for (int c2 = c1; c2 < C; c2 += 1) {
-                if (numGoods[index] == -1) {
-                    index += 1;
-                    continue;
-                } else {
-                    if (diff2Right[c2] - diff2Right[c1] == 0) {
-                        numGoods[index] += (c2 - c1 + 1);
-                    } else {
-                        numGoods[index] = -1; // Dead
-                    }
-                }
-                index += 1;
-            }
+    private static int makePHelper(int row, int[] pi, int index) {
+        if (index == pi.length) {
+            return 0;
         }
+        int pij1 = makePHelper(row, pi, index + 1);
+        int pij = V[row][index] == V[row][index + 1] ? pij1 + 1 : 1;
+        pi[index] = pij;
+        return pij;
     }
 
-    private static int[] makeDiff(int row) {
-        int[] diff2Right = new int[C];
+    private static int maxArea(int[][] P) {
+        int maxArea = Integer.MIN_VALUE;
         for (int c = 0; c < C; c += 1) {
-            if (c == 0) {
-                diff2Right[c] = 0;
-            } else {
-                diff2Right[c] = diff2Right[c - 1] + Math.abs(V[row][c] - V[row][c - 1]);
-            }
+            maxArea = Integer.max(maxArea, maxAreaInHistogram(P, c));
         }
-        return diff2Right;
+        return maxArea;
+    }
+
+    private static int maxAreaInHistogram(int[][] P, int c) {
+        Deque<Node> stack = new LinkedList<>();
+
+        int maxArea = Integer.MIN_VALUE;
+
+        for (int index = 0; index < R; index += 1) {
+            int height = P[index][c];
+
+            boolean breakLoop = false;
+            int newIndex = index;
+            while (!breakLoop) {
+                Node top = stack.peek();
+                if (top == null || top.height < height) {
+                    breakLoop = true;
+                } else if (top.height == height) {
+                    newIndex = top.index;
+                    stack.removeFirst();
+                    breakLoop = true;
+                } else {  // top.height > height
+                    maxArea = Integer.max(maxArea, top.height * (index - top.index));
+                    newIndex = top.index;
+                    stack.removeFirst();
+                }
+            }
+
+            stack.addFirst(new Node(newIndex, height));
+        }
+
+        int index = R;
+        for (Node top : stack) {
+            maxArea = Integer.max(maxArea, top.height * (index - top.index));
+        }
+        return maxArea;
     }
 
 }
