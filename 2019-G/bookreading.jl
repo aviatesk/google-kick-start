@@ -39,13 +39,16 @@ R... (Q elements)
 
 =#
 
+readnum(type::Type{<:Number} = Int) = parse(type, readline())
+readarray(type::Type{<:Number} = Int, dlm = isspace; kwargs...) =
+    parse.(type, split(readline(), dlm; kwargs...))
+
 function main()
-    line = readline()
-    T = parse(Int, line)
+    T = readnum()
     for t = 1:T
-        N, M, Q = map(n -> parse(Int, n), split(readline()))
-        P = map(n -> parse(Int, n), split(readline())) # M elements
-        R = map(n -> parse(Int, n), split(readline())) # Q elements
+        N, M, Q = readarray()
+        P = readarray() # M elements
+        R = readarray() # Q elements
         pages = solve(N, P, R)
         println(stdout, "Case #$(t): $(pages)")
     end
@@ -65,6 +68,6 @@ function solve(N, P, R)
     pages
 end
 
-divisors(n) = [1, (i for i = 2:(n ÷ 2) if n % i === 0)..., n]
+divisors(n) = [(i for i = 1:(n ÷ 2) if n % i === 0)..., n]
 
 main()

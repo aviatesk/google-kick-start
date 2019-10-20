@@ -39,11 +39,15 @@ A... (N elements)
 
 # ---
 
+readnum(type::Type{<:Number} = Int) = parse(type, readline())
+readarray(type::Type{<:Number} = Int, dlm = isspace; kwargs...) =
+    parse.(type, split(readline(), dlm; kwargs...))
+
 function main()
-    T = parse(Int, readline())
+    T = readnum()
     for t = 1:T
-        N, M = map(n -> parse(Int, n), split(readline()))
-        A = map(n -> parse(Int, n), split(readline()))
+        N, M = readarray()
+        A = readarray()
         k = solve(N, M, A)
         println(stdout, "Case #$(t): $(k)")
     end
@@ -51,7 +55,7 @@ end
 
 function solve(N, M, A)
     ret = -1
-    for k = 1:10000 # TODO: for hidden testset
+    for k = 1:1000 # TODO: for hidden testset
         s = sum(k ⊻ Ai for Ai in A)
         s <= M && (ret = k)
     end
