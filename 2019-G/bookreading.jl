@@ -39,9 +39,13 @@ R... (Q elements)
 
 =#
 
+# --- utils
+
 readnum(type::Type{<:Number} = Int) = parse(type, readline())
 readarray(type::Type{<:Number} = Int, dlm = isspace; kwargs...) =
     parse.(type, split(readline(), dlm; kwargs...))
+
+# --- body
 
 function main()
     T = readnum()
@@ -55,19 +59,14 @@ function main()
 end
 
 function solve(N, P, R)
-    pages = 0
-    memo = Dict(n => 0 for n in 1:N)
+    memo = ones(Bool, N)
     for p in P
-        for d in divisors(p)
-            memo[d] += 1
-        end
+        memo[p] = false
     end
-    for r in R
-        pages += N ÷ r - memo[r]
-    end
-    pages
+    pages = Dict(n => count(x -> memo[n*x], 1:(N÷n)) for n = 1:N)
+    sum(ps[r] for r in R) # `pages` should be pre-computed, since R can be [1, 1, 1, ...]
 end
 
-divisors(n) = [(i for i = 1:(n ÷ 2) if n % i === 0)..., n]
+# --- call
 
 main()
