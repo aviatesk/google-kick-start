@@ -20,15 +20,8 @@ function main()
     end
 end
 
-function solve(N, M, A)
-    ret = -1
-    for k = 0:127
-        if sum(Ai ⊻ k for Ai in A) ≤ M
-            ret = k
-        end
-    end
-    ret
-end
+solve(N, M, A) =
+    (k = findlast(k -> sum(Ai ⊻ k for Ai in A) ≤ M, 0:127)) === nothing ? -1 : k - 1
 
 # call
 # ----
