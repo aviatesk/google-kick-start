@@ -35,10 +35,9 @@ function solve(N, H, A, B)
 end
 
 # brute-force search
-combinations(patterns::Itr, n::Int) where {Itr} =
+combinations(patterns, n::Int) =
     _combinations(patterns, n, Vector{Tuple{Vararg{eltype(patterns)}}}(), ())
-# ref: https://discourse.julialang.org/t/splatting-arguments-causes-30x-slow-down/16964/2
-function _combinations(patterns::Itr, n::Int, combs::Vector{Tuple{Vararg{T}}}, comb::Tuple{Vararg{T}}) where {Itr, T}
+function _combinations(patterns, n::Int, combs::Vector{Tuple{Vararg{T}}}, comb::Tuple{Vararg{T}}) where {T}
     if length(comb) === n
         push!(combs, comb)
     else
@@ -48,6 +47,26 @@ function _combinations(patterns::Itr, n::Int, combs::Vector{Tuple{Vararg{T}}}, c
     end
     combs
 end
+
+# # much simpler
+# combinations(pattern, n::Int) = collect(Iterators.product((pattern for i = 1:n)...))[:]
+
+# # slower since `comb::T...` can't be specialized
+# # ref: https://discourse.julialang.org/t/splatting-arguments-causes-30x-slow-down/16964/2
+# function combinations(patterns, n::Int)
+#     combs = Vector{Tuple{Vararg{eltype(patterns)}}}()
+#     _combinations(patterns, n, combs)
+#     combs
+# end
+# function _combinations(patterns, n::Int, combs::Vector{Tuple{Vararg{T}}}, comb::T...) where {T}
+#     if length(comb) === n
+#         push!(combs, comb)
+#     else
+#         for p in patterns
+#             combinations(patterns, n, combs, comb..., p)
+#         end
+#     end
+# end
 
 # call
 # ----
