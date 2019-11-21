@@ -5,6 +5,19 @@ readnum(io = stdin, T::Type{<:Number} = Int) = parse(T, readline(io))
 readarray(io = stdin, T::Type{<:Number} = Int, dlm = isspace; kwargs...) =
     parse.(T, split(readline(io), dlm; kwargs...))
 
+function bitsearch(n::T) where {T<:Integer}
+    ret = Array{Vector{T}}(undef, 1<<n)
+    s = one(T)
+    for bit = s:s<<n
+        is = Vector{T}()
+        for i = s:n
+            bit & s<<(i - s) !== zero(T) && push!(is, i)
+        end
+        ret[bit] = is
+    end
+    ret
+end
+
 # body
 # ----
 
@@ -14,8 +27,7 @@ function main(io = stdin)
         N, S = readarray(io)
         A = Array{Vector{Int}}(undef, N)
         for i = 1:N
-            CA = readarray(io)
-            A[i] = CA[2:end]
+            A[i] = readarray(io)
         end
         ret = solve(N, A)
         println(stdout, "Case #$(t): ", ret)
@@ -23,17 +35,21 @@ function main(io = stdin)
 end
 
 function solve(N, A)
-    ret = 0
-    for i = 1:N, j = 1:N
-        i === j && continue
-        for Ai in A[i]
-            if Ai ∉ A[j]
-                ret += 1
-                break
-            end
+    # NOTE:
+    # Dict{Set{Int}, Int} would cause memory limit error, and so we should
+    # use primitive type `UInt64` via `hash` function
+    memo = Dict{UInt64, Int}()
+    for Ai in A
+        Ci = Ai[1]
+        Aij = Ai[2:end]
+        inds = bitsearch(Ci)
+        for ind in inds
+            h = hash(Set(Aij[ind]))
+            memo[h] = get!(memo, h, 0) + 1
         end
     end
-    ret
+
+    sum(N - memo[hash(Set(Ai[2:end]))] for Ai in A)
 end
 
 # call
