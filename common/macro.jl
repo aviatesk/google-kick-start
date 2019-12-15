@@ -25,7 +25,7 @@ macro collect(exs...)
     ex = exs[end]
     @assert ex.head === :for "for block expression should be given"
     itrspec, body = ex.args
-    @assert itrspec.head === :(=) || itrspec === :in "invalid for loop specification"
+    @assert itrspec.head === :(=) "invalid for loop specification"
     v, itr = itrspec.args
     isif ? :([
         $(esc(body))
