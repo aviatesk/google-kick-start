@@ -5,7 +5,7 @@ Applies `f` for all the possible ``2^n`` sets of bit-masked elements in `ary`
 (where ``n`` is the length of `ary`).
 
 ```julia
-jυλια> bitsearch(1:2) do bit, mask
+julia> bitsearch(1:2) do bit, mask
            @show bit, mask
        end
 (bit, mask) = (1, [2])
@@ -21,8 +21,8 @@ jυλια> bitsearch(1:2) do bit, mask
 """
 function bitsearch(f::Function, ary::AbstractVector)
     for bit in 1:1<<length(ary)
-        args = [a for (i, a) in enumerate(ary) if iszero(bit & 1<<(i-1))]
-        f(bit, args)
+        mask = [a for (i, a) in enumerate(ary) if iszero(bit & 1<<(i-1))]
+        f(bit, mask)
     end
 end
 
