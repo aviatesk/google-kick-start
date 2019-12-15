@@ -13,7 +13,7 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
   * [x] visible
   * [x] hidden
 - [Spectating Villages](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/000000000018666b)
-  * [ ] visible
+  * [x] visible
   * [ ] hidden
 
 2019-G:
