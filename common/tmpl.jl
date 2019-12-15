@@ -1,18 +1,3 @@
-# aviatesk - Google Kick Start
-
-Keeps my challenges/reviews for programming competitions on [Google Kick Start](https://codingcompetitions.withgoogle.com/kickstart).
-
-
-## steps
-
-1. fire up [Juno](https://junolab.org/)
-2. copy [tmpl.jl](./common/tmpl.jl) and paste and save it into a file (let to be `prob.jl`)
-3. create a sample input file and name it `prob.in`
-4. run `prob.jl` interactively and solve !
-
-> [tmpl.jl](./common/tmpl.jl)
-
-```julia
 # %% common
 # ---------
 
@@ -48,4 +33,3 @@ if isdefined(Main, :Juno)
 else
     main()
 end
-```

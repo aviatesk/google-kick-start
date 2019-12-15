@@ -1,36 +1,58 @@
-# utils
-# ----
+# %% common
+# ---------
 
-readnum(io = stdin, T::Type{<:Number} = Int) = parse(T, readline(io))
-readarray(io = stdin, T::Type{<:Number} = Int, dlm = isspace; kwargs...) =
-    parse.(T, split(readline(io), dlm; kwargs...))
+"""
+    bitsearch(f::Function, ary::AbstractVector)
 
-function bitsearch(n::T) where {T<:Integer}
-    ret = Array{Vector{T}}(undef, 1<<n)
-    s = one(T)
-    for bit = s:s<<n
-        is = Vector{T}()
-        for i = s:n
-            bit & s<<(i - s) !== zero(T) && push!(is, i)
-        end
-        ret[bit] = is
+Applies `f` for all the possible ``2^n`` sets of bit-masked elements in `ary`
+(where ``n`` is the length of `ary`).
+
+```julia
+jυλια> bitsearch(1:2) do bit, mask
+           @show bit, mask
+       end
+(bit, mask) = (1, [2])
+(bit, mask) = (2, [1])
+(bit, mask) = (3, Int64[])
+(bit, mask) = (4, [1, 2])
+```
+
+!!! note
+    When ``n`` isn't so small (e.g. ≥ 10), you may need to consider the cost of
+    creating those ``2^n`` masks. Unwinding the two nested 2 `for` loops into an
+    algorithm would help.
+"""
+function bitsearch(f::Function, ary::AbstractVector)
+    for bit in 1:1<<length(ary)
+        args = [a for (i, a) in enumerate(ary) if iszero(bit & 1<<(i-1))]
+        f(bit, args)
     end
-    ret
 end
 
-# body
-# ----
+function bitmasks(ary::AbstractVector{T}) where {T}
+    masks = Vector{Vector{T}}(undef, 2^length(ary))
+    addmask! = let masks = masks
+        (bit, mask) -> @inbounds masks[bit] = mask
+    end
+    bitsearch(addmask!, ary)
+    return masks
+end
+bitmasks(n::T) where {T<:Integer} = bitmasks(one(T):n)
 
-function main(io = stdin)
-    T = readnum(io)
+# %% body
+# -------
+
+function main(io::IO = stdin)
+    readnum = let io = io
+        (T::Type{<:Number} = Int; dlm = isspace, kwargs...) ->
+            parse.(T, split(readline(io), dlm; kwargs...))
+    end
+
+    T, = readnum()
     for t = 1:T
-        N, S = readarray(io)
-        A = Array{Vector{Int}}(undef, N)
-        for i = 1:N
-            A[i] = readarray(io)
-        end
-        ret = solve(N, A)
-        println(stdout, "Case #$(t): ", ret)
+        N, S = readnum()
+        A = [readnum()[2:end] for i = 1:N]
+        println(stdout, "Case #$(t): ", solve(N, A))
     end
 end
 
@@ -40,24 +62,22 @@ function solve(N, A)
     # use primitive type `UInt64` via `hash` function
     memo = Dict{UInt64, Int}()
     for Ai in A
-        Ci = Ai[1]
-        Aij = Ai[2:end]
-        inds = bitsearch(Ci)
-        for ind in inds
-            h = hash(Set(Aij[ind]))
+        for mask in bitmasks(Ai)
+            h = hash(Set(mask))
             memo[h] = get!(memo, h, 0) + 1
         end
     end
 
-    sum(N - memo[hash(Set(Ai[2:end]))] for Ai in A)
+    sum(N - memo[hash(Set(Ai))] for Ai in A)
 end
 
-# call
-# ----
+# %% call
+# -------
 
 if isdefined(Main, :Juno)
-    open("2019-F/_teachme.txt") do f
-        main(f)
+    let f = splitpath(@__FILE__)[end]
+        p = joinpath(@__DIR__, replace(f, r"(.+).jl" => s"\1.in"))
+        open(f -> main(f), p)
     end
 else
     main()
