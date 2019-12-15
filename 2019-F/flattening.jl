@@ -50,30 +50,33 @@ end
 function solve(N, K, A)
     minn = N
 
-    bitsearch(A) do bit, mask # i.e. walls to remain
-        minn = update(minn, mask, N, K)
+    # bit brute force
+    # NOTE: shouldn't create O(2^N) arrays that represent changed walls
+    for bit = 1:1<<N
+        k, n = gaps_and_changed(N, A, bit)
+        if k ≤ K && minn > n
+            minn = n
+        end
     end
 
     minn
 end
 
-function update(minn, mask, N, K)
-    n = N - length(mask)
-    if minn <= n
-        return minn
-    end
-
+function gaps_and_changed(N, A, bit)
     prev = 0 # 1 ≤ Aᵢ ≤ 1000
     k = -1   # number height gaps: -1 offset for initial `prev` update
-    for a in mask
-        if prev !== a
-            k += 1
-            prev = a
+    n′ = 0   # number of unchanged walls
+    for i = 1:N
+        if iszero(bit & 1<<(i-1))
+            n′ += 1
+            if prev !== (@inbounds a = A[i])
+                k += 1
+                prev = a
+            end
         end
-
     end
 
-    return k ≤ K ? n : minn
+    return k, N - n′
 end
 
 # %% call
