@@ -26,8 +26,7 @@ end
 # -------
 
 if isdefined(Main, :Juno)
-    let f = splitpath(@__FILE__)[end]
-        p = joinpath(@__DIR__, replace(f, r"(.+).jl" => s"\1.in"))
+    let p = joinpath(@__DIR__, replace(basename(@__FILE__), r"(.+).jl" => s"\1.in"))
         open(f -> main(f), p)
     end
 else
