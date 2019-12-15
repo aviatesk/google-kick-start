@@ -8,7 +8,7 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
 2019-F:
 - [Flattening](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/000000000018666c)
   * [x] visible
-  * [ ] hidden
+  * [x] hidden
 - [Teach Me](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/00000000001864bc)
   * [x] visible
   * [x] hidden
