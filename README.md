@@ -5,30 +5,35 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
 
 ## archives
 
+2019-E:
+- [Cherries Mesh](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edb/0000000000170721), [cherriesmesh.jl](./2019-E/cherriesmesh.jl)
+  * [x] visible
+  * [x] hidden
+
 2019-F:
-- [Flattening](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/000000000018666c)
+- [Flattening](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/000000000018666c), [flattening.jl](./2019-F/flattening.jl)
   * [x] visible
   * [x] hidden
-- [Teach Me](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/00000000001864bc)
+- [Teach Me](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/00000000001864bc), [teachme.jl](./2019-F/teachme.jl)
   * [x] visible
   * [x] hidden
-- [Spectating Villages](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/000000000018666b)
+- [Spectating Villages](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edc/000000000018666b), [spectatingvilleges.jl](./2019-F/spectatingvilleges.jl)
   * [x] visible
   * [ ] hidden
 
 2019-G:
-- [Book Reading](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050e02/000000000018fd0d)
+- [Book Reading](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050e02/000000000018fd0d), [bookreading.jl](./2019-G/bookreading.jl)
   * [x] visible
   * [x] hidden
-- [The Equation](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050e02/000000000018fe36)
+- [The Equation](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050e02/000000000018fe36), [theequation.jl](./2019-G/theequation.jl)
   * [x] visible
   * [ ] hidden
-- [Shifts](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050e02/000000000018fd5e)
+- [Shifts](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050e02/000000000018fd5e), [shifts.jl](./2019-G/shifts.jl)
   * [x] visible
   * [ ] hidden
 
 2019-H:
-- [H-index](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edd/00000000001a274e)
+- [H-index](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edd/00000000001a274e), [hindex.jl](./2019-H/hindex.jl)
   * [x] visible
   * [x] hidden
 - [Diagonal Puzzle](https://codingcompetitions.withgoogle.com/kickstart/round/0000000000050edd/00000000001a2835)
