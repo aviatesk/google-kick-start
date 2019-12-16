@@ -1,8 +1,8 @@
 """
     bitsearch(f::Function, ary::AbstractVector)
 
-Applies `f` for all the possible ``2^n`` sets of bit-masked elements in `ary`
-(where ``n`` is the length of `ary`).
+Applies `f` for ``2^n`` arrays that represent all the possible bit-masked sets in
+    `ary` (where ``n`` is the length of `ary`).
 
 ```julia
 julia> bitsearch(1:2) do bit, mask
@@ -28,10 +28,10 @@ end
 
 function bitmasks(ary::AbstractVector{T}) where {T}
     masks = Vector{Vector{T}}(undef, 2^length(ary))
-    addmask! = let masks = masks
+    mask! = let masks = masks
         (bit, mask) -> @inbounds masks[bit] = mask
     end
-    bitsearch(addmask!, ary)
+    bitsearch(mask!, ary)
     return masks
 end
 bitmasks(n::T) where {T<:Integer} = bitmasks(one(T):n)
