@@ -39,6 +39,90 @@ function bitmasks(ary::AbstractVector{T}) where {T}
 end
 bitmasks(n::T) where {T<:Integer} = bitmasks(one(T):n)
 
+function decompose_forblk(forblk)
+    @assert forblk.head === :for "for block expression should be given"
+    itrspec, body = forblk.args
+    @assert itrspec.head === :(=) "invalid for loop specification"
+    v, itr = itrspec.args
+    return body, v, itr
+end
+
+function _collect(forblk)
+    body, v, itr = decompose_forblk(forblk)
+    return :([
+        $(esc(body))
+        for $(esc(v)) in $(esc(itr))
+    ])
+end
+function _collect(cond, forblk)
+    body, v, itr = decompose_forblk(forblk)
+    return :([
+        $(esc(body))
+        for $(esc(v)) in $(esc(itr))
+        if $(esc(cond))
+    ])
+end
+
+"""
+    @collect [cond] forblk
+
+Constructs [`Array`](@ref) from lastly evaluated values within a given `for` loop block.
+If the optional `cond` expression is given, values where the `cond` is `false`
+are effectively filtered out.
+
+```julia-repl
+julia> @collect isodd(i) for i = 1:3
+           println("i = ", i); i
+       end
+i = 1
+i = 3
+2-element Array{Int64,1}:
+ 1
+ 3
+```
+
+See also: [`@generator`](@ref)
+"""
+macro collect(exs...) _collect(exs...) end
+
+function _generator(forblk)
+    body, v, itr = decompose_forblk(forblk)
+    return :((
+        $(esc(body))
+        for $(esc(v)) in $(esc(itr))
+    ))
+end
+function _generator(cond, forblk)
+    body, v, itr = decompose_forblk(forblk)
+    return :((
+        $(esc(body))
+        for $(esc(v)) in $(esc(itr))
+        if $(esc(cond))
+    ))
+end
+
+"""
+    @generator [cond] forblk
+
+Constructs [`Base.Generator`](@ref) from a given `for` loop block.
+If the optional `cond` expression is given, values where the `cond` is `false`
+are effectively filtered out.
+
+```julia-repl
+julia> g = @generator isodd(i) for i = 1:3
+           println("i = ", i); i
+       end;
+
+julia> sum(g)
+i = 1
+i = 3
+4
+```
+
+See also: [`@collect`](@ref)
+"""
+macro generator(exs...) _generator(exs...) end
+
 # %% body
 # -------
 
@@ -61,17 +145,15 @@ end
 function solve(V, B, XY)
     adj = adjacency_list(V, XY)
 
-    maxb = 0
-    for mask in bitmasks(V)
+    bs = @generator for mask in bitmasks(V)
         vs = Set(mask)
         for v in mask
             push!(vs, adj[v]...)
         end
-        b = sum(B[collect(vs)])
-        maxb = max(maxb, b)
+        sum(B[collect(vs)])
     end
 
-    return maxb
+    return max(0, maximum(bs))
 end
 
 function adjacency_list(V, XY)
