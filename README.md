@@ -43,6 +43,20 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
   * [ ] visible
   * [ ] hidden
 
+2020-A:
+- [Allocation](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc7/00000000001d3f56), [allocation.jl](./2020-A/allocation.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [Plates](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc7/00000000001d40bb), [plates.jl](./2020-A/plates.jl)
+  * [x] test set 1
+  * [ ] test set 2
+- [Workout](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc7/00000000001d3f5b), [workout.jl](./2020-A/workout.jl)
+  * [x] test set 1
+  * [ ] test set 2
+- [Bundling](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc7/00000000001d3ff3)
+  * [ ] test set 1
+  * [ ] test set 2
+
 
 ## workflow
 
@@ -60,7 +74,7 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
 # %% body
 # -------
 
-function main(io::IO = stdin)
+function main(io = stdin)
     readnum = let io = io
         (T::Type{<:Number} = Int; dlm = isspace, kwargs...) ->
             parse.(T, split(readline(io), dlm; kwargs...))

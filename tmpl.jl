@@ -4,7 +4,7 @@
 # %% body
 # -------
 
-function main(io::IO = stdin)
+function main(io = stdin)
     readnum = let io = io
         (T::Type{<:Number} = Int; dlm = isspace, kwargs...) ->
             parse.(T, split(readline(io), dlm; kwargs...))
