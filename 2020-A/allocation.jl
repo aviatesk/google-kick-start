@@ -19,16 +19,8 @@ function main(io = stdin)
     end
 end
 
-function solve(A, B)
-    sort!(A)
-    n = 0
-    for Ai in A
-        B -= Ai
-        B < 0 && return n
-        n += 1
-    end
-    return n
-end
+# one-liner !
+solve(A, B) = (x = findfirst(Ai -> 0 > (B -= Ai), sort!(A))) !== nothing ? x - 1 : length(A)
 
 # %% call
 # -------

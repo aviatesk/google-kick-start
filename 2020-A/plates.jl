@@ -25,16 +25,21 @@ function main(io = stdin)
     end
 end
 
-# TODO: you're too slow, moron
 function solve(N, K, P, M)
     cumsum!(M, M; dims = 2)
-    function search(n, i, p = P, b = 0)
-        n === N + 1 && return b
-        (p -= i) < 0 && return b
-        iszero(i) || (b += M[n,i])
-        return maximum(i -> search(n+1, i, p, b), 0:K)
+    prev = cur = [M[1,min(p,K)] for p = 1:P] # init with n = 1 case
+    for n = 2:N
+        prev = cur[:]
+        # NOTE: don't think p = 0 case for simplicity since it's never optimal case
+        for p = 1:P
+            cur[p] = prev[p] # x = 0 case
+            for x = 1:(p-1)
+                cur[p] = max(cur[p], M[n,min(x,K)] + prev[p-x])
+            end
+            cur[p] = max(cur[p], M[n,min(p,K)]) # x = p case
+        end
     end
-    return maximum(i -> search(1, i), 0:K)
+    return cur[P]
 end
 
 # %% call

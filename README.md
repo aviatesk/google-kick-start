@@ -49,10 +49,10 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
   * [x] test set 2
 - [Plates](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc7/00000000001d40bb), [plates.jl](./2020-A/plates.jl)
   * [x] test set 1
-  * [ ] test set 2
+  * [x] test set 2
 - [Workout](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc7/00000000001d3f5b), [workout.jl](./2020-A/workout.jl)
   * [x] test set 1
-  * [ ] test set 2
+  * [x] test set 2
 - [Bundling](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc7/00000000001d3ff3)
   * [ ] test set 1
   * [ ] test set 2

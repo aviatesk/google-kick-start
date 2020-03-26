@@ -1,6 +1,3 @@
-# %% common
-# ---------
-
 # adapted:
 # - from https://github.com/JuliaLang/julia/blob/805b6597e05256059a5d412d615a6486406f74c0/base/sort.jl
 # - by @aviatesk, 2020/03/26
@@ -78,41 +75,4 @@ function searchsorted(f, v::AbstractVector, x, ilo::T, ihi::T, o::Ordering) wher
         end
     end
     return (lo + 1) : (hi - 1)
-end
-
-# %% body
-# -------
-
-function main(io = stdin)
-    readnum = let io = io
-        (T::Type{<:Number} = Int; dlm = isspace, kwargs...) ->
-            parse.(T, split(readline(io), dlm; kwargs...))
-    end
-
-    T, = readnum()
-    for t = 1:T
-        N, K = readnum()
-        M = readnum() # NOTE: N integers
-        ret = solve(N, K, M)
-        println(stdout, "Case #$(t): ", ret)
-    end
-end
-
-function solve(N, K, M)
-    ds = diff(M)
-    # NOTE: the returned index corresponds to the optimal "difference"
-    return searchsortedfirst(1:maximum(ds), K; rev = true) do dopt
-        sum((Int(ceil(d/dopt))-1 for d in ds))
-    end
-end
-
-# %% call
-# -------
-
-if isdefined(Main, :Juno)
-    let p = joinpath(@__DIR__, replace(basename(@__FILE__), r"(.+).jl" => s"\1.in"))
-        open(f -> main(f), p)
-    end
-else
-    main()
 end
