@@ -57,6 +57,20 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
   * [ ] test set 1
   * [ ] test set 2
 
+2020-B:
+- [Bike Tour](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc8/00000000002d82e6), [biketour.jl](./2020-B/biketour.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [Bus Routes](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc8/00000000002d83bf), [busroutes.jl](./2020-B/busroutes.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [Robot Path Decoding](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc8/00000000002d83dc), [robotpathdecoding.jl](./2020-B/robotpathdecoding.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [Wandering Robot](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ffc8/00000000002d8565), [wanderingrobot.jl](./2020-B/wanderingrobot.jl)
+  * [ ] test set 1
+  * [ ] test set 2
+
 
 ## workflow
 
