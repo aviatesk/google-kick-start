@@ -1,5 +1,5 @@
-# %% common
-# ---------
+# %% constants
+# ------------
 
 # %% body
 # -------
@@ -26,9 +26,7 @@ end
 # -------
 
 if isdefined(Main, :Juno)
-    let p = joinpath(@__DIR__, replace(basename(@__FILE__), r"(.+).jl" => s"\1.in"))
-        open(f -> main(f), p)
-    end
+    open(f -> main(f), replace(@__FILE__, r"(.+).jl" => s"\1.in"))
 else
     main()
 end
