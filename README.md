@@ -71,6 +71,20 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
   * [ ] test set 1
   * [ ] test set 2
 
+2020-C:
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff43/00000000003380d2), [countdown.jl](./2020-C/countdown.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff43/00000000003379bb), [stablewall.jl](./2020-C/stablewall.jl)
+  * [ ] test set 1
+  * [ ] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff43/00000000003381cb), [perfectsubarray.jl](./2020-C/perfectsubarray.jl)
+  * [x] test set 1
+  * [ ] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff43/0000000000337b4d), [candies.jl](./2020-C/candies.jl)
+  * [ ] test set 1
+  * [ ] test set 2
+
 
 ## workflow
 
