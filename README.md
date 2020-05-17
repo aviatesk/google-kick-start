@@ -103,9 +103,9 @@ Keeps my challenges/reviews for programming competitions on [Google Kick Start](
 # -------
 
 function main(io = stdin)
+    readto(target = '\n') = readuntil(io, target)
     readnum(T::Type{<:Number} = Int; dlm = isspace, kwargs...) =
-        parse.(T, split(readline(io), dlm; kwargs...))
-    readto(target = '\n'; kwargs...) = readuntil(io, target; kwargs...)
+        parse.(T, split(readto(), dlm; kwargs...))
 
     T, = readnum()
     for t = 1:T
@@ -119,7 +119,7 @@ function solve()
     # ...
 end
 
-if isdefined(Main, :Juno)
+@static if @isdefined(Juno)
     open(f -> main(f), replace(@__FILE__, r"(.+).jl" => s"\1.in"))
 else
     main()
