@@ -22,7 +22,7 @@ function solve()
 end
 
 @static if @isdefined(Juno)
-    open(f -> main(f), replace(@__FILE__, r"(.+).jl" => s"\1.in"))
+    main(open(replace(@__FILE__, r"(.+)\.jl" => s"\1.in")))
 else
     main()
 end

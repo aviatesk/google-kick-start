@@ -53,10 +53,8 @@ end
 # %% call
 # -------
 
-if isdefined(Main, :Juno)
-    let p = joinpath(@__DIR__, replace(basename(@__FILE__), r"(.+).jl" => s"\1.in"))
-        open(f -> main(f), p)
-    end
+@static if @isdefined(Juno)
+    main(open(replace(@__FILE__, r"(.+)\.jl" => s"\1.in")))
 else
     main()
 end
