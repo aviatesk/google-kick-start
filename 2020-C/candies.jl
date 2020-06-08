@@ -2,35 +2,38 @@
 # ------------
 
 function decompose_forblk(forblk)
-    @assert forblk.head === :for "for block expression should be given"
+    @assert Meta.isexpr(forblk, :for) "for block expression should be given"
     itrspec, body = forblk.args
-    @assert itrspec.head === :(=) "invalid for loop specification"
+    @assert Meta.isexpr(itrspec, :(=)) "invalid for loop specification"
     v, itr = itrspec.args
     return body, v, itr
 end
 
-function _collect(forblk)
+function recompose_to_comprehension(forblk, cond = nothing; gen = false)
     body, v, itr = decompose_forblk(forblk)
-    return :([
-        $(esc(body))
-        for $(esc(v)) in $(esc(itr))
-    ])
+    return isnothing(cond) ?
+        esc(gen ? :(($body for $v in $itr)) : :([$body for $v in $itr])) :
+        esc(gen ? :(($body for $v in $itr if $cond)) : :([$body for $v in $itr if $cond]))
 end
-function _collect(cond, forblk)
-    body, v, itr = decompose_forblk(forblk)
-    return :([
-        $(esc(body))
-        for $(esc(v)) in $(esc(itr))
-        if $(esc(cond))
-    ])
+
+function walk_and_transform(x, cond = nothing; gen = false)
+    Meta.isexpr(x, :for) && return recompose_to_comprehension(x, cond; gen = gen), true
+    x isa Expr || return x, false
+    for (i, ex) in enumerate(x.args)
+        ex, transformed = walk_and_transform(ex, cond; gen = gen)
+        x.args[i] = ex
+        transformed && return x, true # already transformed
+    end
+    return x, false
 end
 
 """
-    @collect [cond] forblk
+    @collect [cond] ex
 
-Constructs [`Array`](@ref) from lastly evaluated values within a given `for` loop block.
-If the optional `cond` expression is given, values where the `cond` is `false`
-are effectively filtered out.
+Constructs [`Array`](@ref) from lastly evaluated values from a `for` loop block that appears
+  first within given `ex` expression.
+If the optional `cond` expression is given, values where the `cond` is `false` are
+  effectively filtered out.
 
 ```julia-repl
 julia> @collect isodd(i) for i = 1:3
@@ -45,37 +48,24 @@ i = 3
 
 See also: [`@generator`](@ref)
 """
-macro collect(exs...) _collect(exs...) end
-
-function _generator(forblk)
-    body, v, itr = decompose_forblk(forblk)
-    return :((
-        $(esc(body))
-        for $(esc(v)) in $(esc(itr))
-    ))
-end
-function _generator(cond, forblk)
-    body, v, itr = decompose_forblk(forblk)
-    return :((
-        $(esc(body))
-        for $(esc(v)) in $(esc(itr))
-        if $(esc(cond))
-    ))
-end
+macro collect(ex) first(walk_and_transform(ex)) end
+macro collect(cond, ex) first(walk_and_transform(ex, cond)) end
 
 """
-    @generator [cond] forblk
+    @generator ex
 
-Constructs [`Base.Generator`](@ref) from a given `for` loop block.
-If the optional `cond` expression is given, values where the `cond` is `false`
-are effectively filtered out.
+Constructs [`Base.Generator`](@ref) from lastly evaluated values from a `for` loop block
+  that appears first within given `ex` expression.
+If the optional `cond` expression is given, values where the `cond` is `false` are
+  effectively filtered out.
+
+Constructs [`Base.Generator`](@ref) from lastly evaluated values from a `for` loop block
+  within given `ex` expression.
 
 ```julia-repl
-julia> g = @generator isodd(i) for i = 1:3
+julia> @generator isodd(i) for i = 1:3
            println("i = ", i); i
-       end;
-
-julia> sum(g)
+       end |> sum
 i = 1
 i = 3
 4
@@ -83,20 +73,17 @@ i = 3
 
 See also: [`@collect`](@ref)
 """
-macro generator(exs...) _generator(exs...) end
+macro generator(ex) first(walk_and_transform(ex; gen = true)) end
+macro generator(cond, ex) first(walk_and_transform(ex, cond; gen = true)) end
 
 
 # %% body
 # -------
 
 function main(io = stdin)
-    readnum = let io = io
-        (T::Type{<:Number} = Int; dlm = isspace, kwargs...) ->
-            parse.(T, split(readline(io), dlm; kwargs...))
-    end
-    readto = let io = io
-        (target = '\n'; kwargs...) -> readuntil(io, target; kwargs...)
-    end
+    readto(target = '\n') = readuntil(io, target)
+    readnum(T::Type{<:Number} = Int; dlm = isspace, kwargs...) =
+        parse.(T, split(readto(), dlm; kwargs...))
 
     T, = readnum()
     for t = 1:T
@@ -109,19 +96,19 @@ function main(io = stdin)
 end
 
 function solve(N, Q, A, ops)
-    (@generator for (query, (l, r)) in ops
+    @generator for (query, (l, r)) in ops
         if query
-            (@generator for (i, Ai) in enumerate(@view A[l:r])
+            @generator for (i, Ai) in enumerate(@view A[l:r])
                 isodd(i) ? (Ai * i) : -(Ai * i)
-            end) |> sum
+            end |> sum
         else
             A[l] = r
             0
         end
-    end) |> sum
+    end |> sum
 end
 
-if isdefined(Main, :Juno)
+@static if @isdefined(Juno)
     open(f -> main(f), replace(@__FILE__, r"(.+).jl" => s"\1.in"))
 else
     main()
