@@ -19,12 +19,21 @@ function main(io = stdin)
     end
 end
 
-function make_perfects(NAs)
+@static @isdefined(Juno) && using Lazy
+
+function make_perfects(NAs)::Set{Int}
+    @static @isdefined(Lazy) && begin
+    m = maximum(NAs) do (_,A)
+        @>> A filter(>(0)) sum
+    end
+    return @>> Lazy.range(0) map(abs2) takewhile(≤(m)) Set
+    end
+
     m = maximum(NAs) do (N,A)
         sum(filter(Ai->Ai>0, A))
     end
     n = 0
-    perfects = Set{Int}()
+    perfects = Set()
     while (perfect = n^2) ≤ m
         push!(perfects, perfect)
         n += 1
@@ -43,7 +52,7 @@ function solve(N, A, perfects)
     return ret
 end
 
-if isdefined(Main, :Juno)
+@static if @isdefined(Juno)
     open(f -> main(f), replace(@__FILE__, r"(.+).jl" => s"\1.in"))
 else
     main()
