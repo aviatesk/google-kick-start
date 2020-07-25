@@ -1,6 +1,4 @@
-# aviatesk - google kick start
-
-Keeps my challenges/reviews for programming competitions on [Google Kick Start](https://codingcompetitions.withgoogle.com/kickstart).
+my footprints on [google kick start](https://codingcompetitions.withgoogle.com/kickstart)
 
 
 ## archives
