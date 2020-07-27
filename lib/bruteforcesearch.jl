@@ -45,6 +45,44 @@ See also: [`@collect`](@ref)
 """
 macro generator end
 
+"""
+    bruteforcesearch(n::Integer, b::Integer = 2)
+    bruteforcesearch(f::Function, n::Integer, b::Integer = 2)
+
+$(""#=TODO: add some equation here for the future reference=#)
+
+!!! note
+    By default (i.e. when `b == 2`), this function is equivalent to bit-brute-force search.
+
+```julia-repl
+julia> for gen in bruteforcesearch(3)
+           @show collect(gen)
+       end
+collect(gen) = [2, 1, 1]
+collect(gen) = [1, 2, 1]
+collect(gen) = [2, 2, 1]
+collect(gen) = [1, 1, 2]
+collect(gen) = [2, 1, 2]
+collect(gen) = [1, 2, 2]
+collect(gen) = [2, 2, 2]
+collect(gen) = [1, 1, 1]
+
+julia> bruteforcesearch(2, 3) do gen
+           @show collect(gen)
+       end |> collect;
+collect(gen) = [2, 1]
+collect(gen) = [3, 1]
+collect(gen) = [1, 2]
+collect(gen) = [2, 2]
+collect(gen) = [3, 2]
+collect(gen) = [1, 3]
+collect(gen) = [2, 3]
+collect(gen) = [3, 3]
+collect(gen) = [1, 1]
+```
+"""
+function bruteforcesearch end
+
 # %% library body
 # ---------------
 
@@ -80,26 +118,39 @@ macro collect(cond, ex) first(walk_and_transform(ex, cond)) end
 macro generator(ex) first(walk_and_transform(ex; gen = true)) end
 macro generator(cond, ex) first(walk_and_transform(ex, cond; gen = true)) end
 
+@inbounds begin
 
-# %% comparison example
-
-function forbench(n)
-    ret = 0
-    for i in 1:n-1
-        ret = max(ret, gcd(i,n))
+function bruteforcesearch(n::Integer, b::Integer = 2)
+    baselen = length(string(b, base = 10))
+    return @generator for i = 1:b^n
+        s = reverse(string(i, pad = n, base = b))[1:n] # cut off the overflowed char when `i == base^n`
+        @generator for ns in partition(s, baselen)
+            parse(Int, ns) + 1 # for 1-based indexing
+        end
     end
-    return ret
-end
-function genbench(n)
-    return @generator for i in 1:n-1
-        gcd(i,n)
-    end |> maximum
 end
 
-using BenchmarkTools
-forbench(10)
-genbench(10)
-n = 1000000
-# should be almost same performance
-@btime forbench($n)
-@btime genbench($n)
+function bruteforcesearch(f::Function, n::Integer, b::Integer = 2)
+    baselen = length(string(b, base = 10))
+    return @generator for i = 1:b^n
+        s = reverse(string(i, pad = n, base = b))[1:n] # cut off the overflowed char when `i == base^n`
+        gen = @generator for ns in partition(s, baselen)
+            parse(Int, ns) + 1 # for 1-based indexing
+        end
+        f(gen)
+    end
+end
+
+function partition(a, n)
+    return if n == 1
+        a
+    else
+        @collect for i in 1:(length(a)÷n)
+            s = 1+n*(i-1)
+            e = n*i
+            a[s:e]
+        end
+    end
+end
+
+end # @inbounds
