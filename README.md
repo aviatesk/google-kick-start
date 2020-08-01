@@ -94,8 +94,8 @@ my footprints on [google kick start](https://codingcompetitions.withgoogle.com/k
 > [tmpl.jl](./tmpl.jl)
 
 ```julia
-# %% constants
-# ------------
+# %% constants & libraries
+# ------------------------
 
 # %% body
 # -------
@@ -117,7 +117,7 @@ function solve()
     # ...
 end
 
-@static if @isdefined(Juno)
+@static if @isdefined(Juno) || @isdefined(VSCodeServer)
     main(open(replace(@__FILE__, r"(.+)\.jl" => s"\1.in")))
 else
     main()
