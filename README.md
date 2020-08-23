@@ -83,6 +83,20 @@ my footprints on [google kick start](https://codingcompetitions.withgoogle.com/k
   * [ ] test set 1
   * [ ] test set 2
 
+2020-E:
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff47/00000000003bf4ed), [longestarithmetic.jl](./2020-E/longestarithmetic.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff47/00000000003bef73), [highbuildings.jl](./2020-E/highbuildings.jl)
+  * [x] test set 1
+  * [ ] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff47/00000000003bede9), [toys.jl](./2020-E/toys.jl)
+  * [x] test set 1
+  * [ ] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff47/00000000003bef29), goldenstone.jl
+  * [ ] test set 1
+  * [ ] test set 2
+
 
 ## workflow
 
