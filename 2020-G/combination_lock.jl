@@ -20,7 +20,7 @@ function main(io = stdin)
 end
 
 # brute force
-solve(W, N, X) = minimum(compute_steps(N, X, n) for n in 1:N)
+solve(W, N, X) = minimum(compute_steps(N, X, y) for y in X)
 
 compute_steps(N, X, y) = sum(x ≤ y ? min(y-x, N-y+x) : min(x-y, N+y-x) for x in X)
 

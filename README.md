@@ -97,6 +97,20 @@ my footprints on [google kick start](https://codingcompetitions.withgoogle.com/k
   * [ ] test set 1
   * [ ] test set 2
 
+2020-G:
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/00000000001a0069/0000000000414bfb), [kick_start.jl](./2020-G/kick_start.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/00000000001a0069/0000000000414a23), [maximum_coins.jl](./2020-G/maximum_coins.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/00000000001a0069/0000000000414a24), [combination_lock.jl](./2020-G/combination_lock.jl)
+  * [x] test set 1
+  * [x] test set 2
+  * [ ] test set 3
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/00000000001a0069/0000000000415054), merge_cards.jl
+  * [ ] test set 1
+  * [ ] test set 2
 
 ## workflow
 
