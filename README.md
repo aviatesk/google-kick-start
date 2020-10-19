@@ -108,9 +108,10 @@ my footprints on [google kick start](https://codingcompetitions.withgoogle.com/k
   * [x] test set 1
   * [x] test set 2
   * [ ] test set 3
-- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/00000000001a0069/0000000000415054), merge_cards.jl
-  * [ ] test set 1
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/00000000001a0069/0000000000415054), [merge_cards.jl](./2020-G/merge_cards.jl)
+  * [x] test set 1
   * [ ] test set 2
+  * [ ] test set 3
 
 ## workflow
 
