@@ -59,8 +59,8 @@ end
 function recompose_to_comprehension(forblk, cond = nothing; gen = false)
     body, v, itr = decompose_forblk(forblk)
     return isnothing(cond) ?
-        esc(gen ? :(($body for $v in $itr)) : :([$body for $v in $itr])) :
-        esc(gen ? :(($body for $v in $itr if $cond)) : :([$body for $v in $itr if $cond]))
+        (gen ? :(($body for $v in $itr)) : :([$body for $v in $itr])) :
+        (gen ? :(($body for $v in $itr if $cond)) : :([$body for $v in $itr if $cond]))
 end
 
 function walk_and_transform(x, cond = nothing; gen = false)
@@ -74,11 +74,11 @@ function walk_and_transform(x, cond = nothing; gen = false)
     return x, false
 end
 
-macro collect(ex) first(walk_and_transform(ex)) end
-macro collect(cond, ex) first(walk_and_transform(ex, cond)) end
+macro collect(ex) esc(first(walk_and_transform(ex))) end
+macro collect(cond, ex) esc(first(walk_and_transform(ex, cond))) end
 
-macro generator(ex) first(walk_and_transform(ex; gen = true)) end
-macro generator(cond, ex) first(walk_and_transform(ex, cond; gen = true)) end
+macro generator(ex) esc(first(walk_and_transform(ex; gen = true))) end
+macro generator(cond, ex) esc(first(walk_and_transform(ex, cond; gen = true))) end
 
 
 # %% comparison example
