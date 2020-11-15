@@ -113,6 +113,21 @@ my footprints on [google kick start](https://codingcompetitions.withgoogle.com/k
   * [ ] test set 2
   * [ ] test set 3
 
+2020-H:
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff49/000000000043adc7), [retype.jl](./2020-H/retype.jl)
+  * [x] test set 1
+  * [x] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff49/000000000043b0c6), [boring_numbers.jl](./2020-H/boring_numbers.jl)
+  * [x] test set 1
+  * [ ] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff49/000000000043b027), [rugby.jl](./2020-H/rugby.jl)
+  * [ ] test set 1
+  * [ ] test set 2
+- [problem](https://codingcompetitions.withgoogle.com/kickstart/round/000000000019ff49/000000000043aee7), [friends.jl](./2020-H/friends.jl)
+  * [ ] test set 1
+  * [ ] test set 2
+
+
 ## workflow
 
 1. fire up [Juno](https://junolab.org/)
