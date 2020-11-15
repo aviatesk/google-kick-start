@@ -18,20 +18,25 @@ function main(io = stdin)
     end
 end
 
-function solve(L, R)
-    s = 0
-    for n in L:R
-        s += isboring(n)
-    end
-    return s
-end
+solve(L, R) = count_boring(R) - count_boring(L - 1)
 
-function isboring(n)
+function count_boring(n)
+    s = 0
+
     ks = parse.(Int, split(string(n), ""))
-    for (i,k) in enumerate(ks)
-        isodd(i) ⊻ isodd(k) && return false
+    kn = length(ks)
+
+    for i in 1:kn-1
+        s += 5^i
     end
-    return true
+
+    for (i, k) in enumerate(ks)
+        n = count((isodd(i) ? isodd : iseven)(k′) for k′ in 0:(i==kn ? k : k-1))
+        s += n * 5^(kn-i)
+        (isodd(i) ? isodd : iseven)(k) || break
+    end
+
+    return s
 end
 
 @static if @isdefined(Juno) || @isdefined(VSCodeServer)

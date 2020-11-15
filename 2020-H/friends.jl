@@ -30,14 +30,12 @@ function solve(N::T, Q, names, queries) where {T}
         end
     end
 
-    ret = Int[]
-    for (s, d) in queries
-        ds = dijkstra_shortest_paths(g, s)
-        dist = ds.dists[d]
-        push!(ret, dist == typemax(T) ? -1 : dist + 1)
+    fws = floyd_warshall_shortest_paths(g)
+    ans = map(queries) do (s, d)
+        dist = fws.dists[s, d]
+        dist == typemax(T) ? -1 : dist
     end
-
-    return join(ret, ' ')
+    return join(ans, ' ')
 end
 
 @static if @isdefined(Juno) || @isdefined(VSCodeServer)
